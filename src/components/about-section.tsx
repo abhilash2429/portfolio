@@ -16,27 +16,26 @@ const AboutSection = () => {
         </h1>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          Aspiring AI and Software Engineer working at the intersection of
-          machine intelligence and software systems. I turn ideas into products
-          that make me go crazy at 2 AM. Most of them start with a simple
-          question — “Why?”
+          I&apos;m an AI and software engineer in the making. I build products
+          around ideas that keep me up at 2 AM, and most of them start with me
+          asking &quot;why?&quot;
         </p>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          I have always been a big believer in technology. It impressed me from
-          my early age — from iPods, Early Keypads to Android phones and now the present
-          AI Revolution. I'm starting to love building things with AI, even when I
-          don’t fully know how.
+          Tech has had me hooked since I was a kid: iPods, keypad phones, then
+          Android, and now AI. These days I love building with AI, even when I
+          don&apos;t fully know how yet.
         </p>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          Constant learning, breaking things, and always working on something.
-          I have a strong belief that all of this will get me somewhere.
+          I&apos;m usually in the middle of building something and breaking a
+          few things along the way. I&apos;m pretty sure it all adds up to
+          something.
         </p>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          And when I'm not building, I'm into financial markets, reading books,
-          watching movies, or getting lost in random YouTube rabbit holes.
+          When I&apos;m not building, I follow the financial markets, read,
+          watch movies, or fall down YouTube rabbit holes.
         </p>
 
         <p
@@ -45,8 +44,8 @@ const AboutSection = () => {
             "sm:!mt-4"
           )}
         >
-          <span className="text-foreground font-medium">Open to Work</span>:
-          Internships , Full-Time, or Collabs.{" "}
+          <span className="text-foreground font-medium">Open to work</span>:
+          internships, full-time roles, or collabs.{" "}
           <a
             href={`mailto:${config.social.email}`}
             aria-label="Hire Me"

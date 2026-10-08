@@ -1,4 +1,6 @@
-# portfolio-v2
+# abhilash24.me
+
+Personal site and blog of Abhilash Reddy Manda, built with Next.js, Velite and Tailwind.
 
 ## Requirements
 

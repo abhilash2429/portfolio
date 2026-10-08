@@ -22,7 +22,7 @@ export const config = {
     youtube: "",
     twitter: "",
     buymeacoffee: "https://buymeacoffee.com/abhilash2429",
-    resume: "https://example.com/your-resume.pdf",
+    resume: "/resume",
   },
 
   auth: {

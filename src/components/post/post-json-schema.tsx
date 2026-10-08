@@ -24,7 +24,7 @@ const JsonSchemaLD = ({ post }: { post: Post }) => {
           dateModified: post.date,
           author: {
             "@type": "Person",
-            name: "Faisal tariq",
+            name: "Abhilash Reddy Manda",
           },
         }),
       }}

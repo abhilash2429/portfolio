@@ -54,7 +54,6 @@ export const getSEOTags = ({
       title: openGraph?.title || config.appName,
       description: openGraph?.description || config.appDescription,
       card: "summary_large_image",
-      creator: "@FaisalTari78554",
     },
 
     ...(canonicalUrlRelative && {
@@ -80,31 +79,11 @@ export const renderSchemaTags = () => {
           image: `https://${config.domainName}/logo.png`,
           url: `https://${config.domainName}/`,
 
-          dateCreated: "2022-12-23T12:34:00-05:00",
-          dateModified: "2023-12-26T14:53:00-05:00",
           mainEntity: {
             "@type": "Person",
-            name: "Faisal Tariq",
-            alternateName: "faisal_griz",
-            identifier: "123475623",
-            interactionStatistic: [
-              {
-                "@type": "InteractionCounter",
-                interactionType: "https://schema.org/FollowAction",
-                userInteractionCount: 1,
-              },
-              {
-                "@type": "InteractionCounter",
-                interactionType: "https://schema.org/LikeAction",
-                userInteractionCount: 5,
-              },
-            ],
-          },
-          applicationCategory: "ProfilePage",
-          agentInteractionStatistic: {
-            "@type": "InteractionCounter",
-            interactionType: "https://schema.org/WriteAction",
-            userInteractionCount: 2346,
+            name: "Abhilash Reddy Manda",
+            url: `https://${config.domainName}/`,
+            sameAs: [config.social.github, config.social.linkedin],
           },
         }),
       }}

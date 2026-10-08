@@ -4,7 +4,7 @@ import { BasePath } from "~/lib/utils";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPosts = posts.map((post) => ({
-    url: BasePath(`/blog/${post.slugAsParams.split("/")}`),
+    url: BasePath(`/blog/${post.slugAsParams}`),
     lastModified: post.date,
   }));
 
@@ -20,10 +20,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: BasePath("/projects"),
-      lastModified: new Date(),
-    },
-    {
-      url: BasePath("/about"),
       lastModified: new Date(),
     },
 

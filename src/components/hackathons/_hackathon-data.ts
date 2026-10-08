@@ -12,13 +12,13 @@ export type THackathon = {
 const hackathons: THackathon[] = [
   {
     id: createId(),
-    title: "TCS AI Hackathon — TCS Technology Day",
+    title: "TCS AI Hackathon",
     role: "Winner",
     date: "July 2026",
     link: "https://drive.google.com/file/d/10CNecnstq9_I7sGFySNo0rsbjeyZCStA/view?usp=sharing",
     description: [
-      "Won first place as part of a 5-person team, beating roughly 30 competing teams (about 150 participants) in TCS's company-wide AI hackathon.",
-      "Built an AI agent that ingests bulk customer feedback and turns it into structured output — complaint categories, sentiment trends, and actionable insights.",
+      "Won first place with a 5-person team, ahead of roughly 30 teams (about 150 participants) at a college AI hackathon hosted by TCS.",
+      "Built an AI agent that ingests bulk customer feedback and turns it into structured output: complaint categories, sentiment trends, and actionable insights.",
     ],
   },
   {
@@ -28,7 +28,7 @@ const hackathons: THackathon[] = [
     date: "May 2026",
     link: "https://drive.google.com/file/d/1WuTUidWNzSoFeN349NXxyhVj-Tt4AKbd/view",
     description: [
-      "Cleared Round 1 solo out of 52,000+ registrants (roughly the top 0.1%), building GitMergeEnv — an RL environment for git merge conflict resolution with three difficulty tiers, a deterministic grader, and reward shaping tuned toward better fixes.",
+      "Cleared Round 1 solo out of 52,000+ registrants (roughly the top 0.1%), building GitMergeEnv, an RL environment for git merge conflict resolution with three difficulty tiers, a deterministic grader, and reward shaping tuned toward better fixes.",
       "Advanced to the in-person Grand Finale in Bangalore with Oversight Arena, a five-worker pipeline that moves through requirement analysis, codegen, test generation, security review, and deploy approval, with two adversarial mechanics (hidden-flaw state & colluding-pair mode). Trained Qwen2.5-3B against it with GRPO.",
     ],
   },
