@@ -47,10 +47,13 @@ export default defineConfig({
       [
         rehypeAutolinkHeadings,
         {
+          // behavior "wrap" puts the link around the heading text, so an
+          // explicit aria-label replaces that text for screen readers and
+          // every heading announces as "Link to section". The heading text is
+          // already the correct accessible name.
           behavior: "wrap",
           properties: {
             className: ["subheading-anchor"],
-            ariaLabel: "Link to section",
           },
         },
       ],

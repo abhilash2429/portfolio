@@ -1,9 +1,21 @@
 [data-rehype-pretty-code-figure] pre {
-  @apply rounded-lg bg-secondary px-0;
+  @apply rounded-lg border border-border bg-secondary px-0;
+  /* Shiki inline-styles the theme's dark background onto the element, which in
+     light mode collides with the muted-foreground token applied below and
+     leaves plain-text fences near-black on black. Let the site's own tokens
+     win instead. */
+  background-color: hsl(var(--secondary)) !important;
 }
 
 [data-rehype-pretty-code-figure] code {
-  @apply border-0 p-0 font-mono text-sm !leading-snug text-muted-foreground md:text-base;
+  @apply border-0 p-0 font-mono text-sm !leading-snug text-foreground md:text-base;
+}
+
+/* Tokens shiki did not recolour keep the dark theme's own colours, which are
+   unreadable on a light ground. Only override where shiki left an inline
+   colour that assumes a dark background. */
+[data-rehype-pretty-code-figure] code span {
+  color: inherit;
 }
 
 [data-rehype-pretty-code-figure] code[data-line-numbers] {

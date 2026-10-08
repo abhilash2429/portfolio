@@ -156,7 +156,7 @@ const shadcnPreset = {
 
 const config = {
   presets: [shadcnPreset],
-  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: ["./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "./src/content/**/*.mdx"],
   theme: {
     extend: {
       typography: {

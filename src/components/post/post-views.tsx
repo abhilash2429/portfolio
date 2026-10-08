@@ -5,6 +5,10 @@ interface PostViewsProps {
 }
 
 const PostViews = ({ views }: PostViewsProps) => {
+  // A freshly published post reading "0 Views" is noise that makes it look
+  // ignored. Show the counter once there is something to count.
+  if (!views) return null;
+
   return (
     <dl>
       <dt className="sr-only">Blog post views</dt>
