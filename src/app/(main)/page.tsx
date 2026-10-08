@@ -8,25 +8,41 @@ import { HackathonList, hackathons } from "~/components/hackathons";
 import { sortPosts } from "~/lib/utils";
 import ContactUs from "../../components/contact-us";
 import GitHubContributions from "~/components/github-contributions";
-import IntroReveal from "~/components/intro-reveal";
+import Reveal from "~/components/reveal";
+import { OpenSourceList, contributions } from "~/components/open-source";
 
 const HomePage = () => {
   const publishedPosts = posts.filter((post) => post.published);
   const sortedPosts = sortPosts(publishedPosts);
 
   return (
-    <IntroReveal>
-      <div className="!mt-8 space-y-14">
+    <div className="!mt-8 space-y-14">
+      <Reveal>
         <AboutSection />
+      </Reveal>
+      <Reveal delay={0.12}>
         <Skills />
+      </Reveal>
+      <Reveal delay={0.24}>
         <GitHubContributions />
-        <ProjectList projects={projects.slice(0, 4)} metadata />
+      </Reveal>
+      <ProjectList projects={projects.slice(0, 4)} metadata />
+      <Reveal>
         <HackathonList hackathons={hackathons} />
+      </Reveal>
+      <Reveal>
+        <OpenSourceList contributions={contributions} />
+      </Reveal>
+      <Reveal>
         <PostList posts={sortedPosts.slice(0, 4)} showRss layout="single" />
+      </Reveal>
+      <Reveal>
         <EducationList educationList={educationList} />
+      </Reveal>
+      <Reveal>
         <ContactUs />
-      </div>
-    </IntroReveal>
+      </Reveal>
+    </div>
   );
 };
 

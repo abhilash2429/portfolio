@@ -1,21 +1,24 @@
 "use client";
 import Marquee from "react-fast-marquee";
+import { useReducedMotion } from "framer-motion";
 import { BACKEND_STACKS, FRONTEND_STACKS, stacksProps } from "~/constants/stack";
 import { typo } from "./ui/typograpghy";
 import BlurText from "~/components/ui/blur-text";
 
 const Skills = () => {
+  const reduced = useReducedMotion();
+
   return (
     <section aria-label="skills" className="my-4 space-y-8 bg-background">
       <h2 className={typo({ variant: "h2" })}>
         <BlurText text="Tools that I have used" />
       </h2>
       <div className="w-full space-y-6">
-        <Marquee autoFill pauseOnHover speed={20}>
+        <Marquee autoFill pauseOnHover speed={20} play={!reduced}>
           <SkillsList stacks={BACKEND_STACKS} />
         </Marquee>
 
-        <Marquee autoFill pauseOnHover direction="right" speed={20}>
+        <Marquee autoFill pauseOnHover direction="right" speed={20} play={!reduced}>
           <SkillsList stacks={FRONTEND_STACKS} />
         </Marquee>
       </div>

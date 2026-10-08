@@ -2,6 +2,7 @@
 
 import { Post } from "#site/content";
 import Image from "next/image";
+import { ViewTransition } from "react";
 import BackButton from "~/components/back-btn";
 import Comments from "~/components/comments";
 import { MDXContent } from "~/components/mdx";
@@ -25,21 +26,24 @@ export default function BlogDetailClient({ post, views }: BlogDetailClientProps)
           metadata={post.metadata}
           date={post.date}
           views={views}
+          slug={post.slugAsParams}
         />
 
         <TableOfContent toc={post.toc} />
 
-        <div className="relative aspect-video">
-          <Image
-            src={post.cover}
-            alt={post.title}
-            priority
-            fill
-            quality={75}
-            className="size-full rounded-md object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-        </div>
+        <ViewTransition name={`post-cover-${post.slugAsParams}`}>
+          <div className="relative aspect-video">
+            <Image
+              src={post.cover}
+              alt={post.title}
+              priority
+              fill
+              quality={75}
+              className="size-full rounded-md object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
+        </ViewTransition>
       </div>
 
       <main id="main-content" className={cn("mdx-content prose dark:prose-invert max-w-none")}>

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, ViewTransition } from "react";
 import Footer from "~/components/layout/footer";
 import Navbar from "~/components/layout/nav";
 import SkipContent from "~/components/ui/skip-content";
@@ -9,7 +9,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <div className="!mb-6 space-y-4">
         <SkipContent />
         <Navbar />
-        {children}
+        <ViewTransition name="page">
+          <div>{children}</div>
+        </ViewTransition>
       </div>
       <Footer />
     </div>

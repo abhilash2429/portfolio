@@ -1,31 +1,30 @@
 "use client";
 
 /**
- * Tiny module-level store shared between IntroLoader (producer) and
- * IntroGate (consumer). The gate keeps the page invisible until the
- * intro has fully finished, so no UI flashes behind the overlay.
+ * Shared intro state. An inline script in the root layout sets
+ * <html data-intro="pending"> before first paint on a first homepage visit,
+ * so CSS can hide the page with no flash. The loader clears it when the
+ * curtain starts lifting, and everything waiting on the intro reveals then.
  */
 
 type Listener = () => void;
 
-let introActive = false;
+export const INTRO_STORAGE_KEY = "ab24-intro-played";
+
+/** Runs before hydration. Keep in sync with introStore.isPending. */
+export const INTRO_BOOT_SCRIPT = `try{if(location.pathname==="/"&&sessionStorage.getItem("${INTRO_STORAGE_KEY}")!=="1"&&!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.dataset.intro="pending"}catch(e){}`;
 
 const listeners = new Set<Listener>();
 
 export const introStore = {
-  isActive: () => introActive,
-  shouldPlay: () => {
-    if (typeof window === "undefined") return false;
-    let played = false;
+  isPending: () =>
+    typeof document !== "undefined" && document.documentElement.dataset.intro === "pending",
+  done() {
+    if (!introStore.isPending()) return;
+    delete document.documentElement.dataset.intro;
     try {
-      played = sessionStorage.getItem("ab24-intro-played") === "1";
+      sessionStorage.setItem(INTRO_STORAGE_KEY, "1");
     } catch {}
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    return !played && !reduced;
-  },
-  setActive(value: boolean) {
-    if (introActive === value) return;
-    introActive = value;
     listeners.forEach((listener) => listener());
   },
   subscribe(listener: Listener) {

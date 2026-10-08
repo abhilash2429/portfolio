@@ -1,15 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "~/lib/utils";
 
 /**
- * BlurText — word-by-word blur reveal (react-bits / Magic UI style).
+ * BlurText: word-by-word blur reveal (react-bits / Magic UI style).
  * Splits text into words; each word fades + rises + de-blurs in a
  * staggered cascade when scrolled into view. Plays once.
  *
  * Theme-aware: uses foreground/muted tokens inherited from the parent,
- * works identically in light and dark UIs. Reduced-motion safe.
+ * works identically in light and dark UIs. Reduced-motion renders plain text.
  */
 
 type Props = {
@@ -38,11 +38,17 @@ const word = {
     y: 0,
     filter: "blur(0px)",
     transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    transitionEnd: { filter: "none" },
   },
 };
 
 const BlurText = ({ text, className, delay = 0, stagger = 0.06 }: Props) => {
+  const reduced = useReducedMotion();
   const words = text.split(" ");
+
+  if (reduced) {
+    return <span className={cn("inline-block", className)}>{text}</span>;
+  }
 
   return (
     <motion.span
@@ -61,7 +67,7 @@ const BlurText = ({ text, className, delay = 0, stagger = 0.06 }: Props) => {
           className="inline-block will-change-[opacity,transform,filter]"
         >
           {w}
-          {i < words.length - 1 ? "\u00A0" : ""}
+          {i < words.length - 1 ? " " : ""}
         </motion.span>
       ))}
     </motion.span>

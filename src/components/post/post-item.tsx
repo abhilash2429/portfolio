@@ -1,5 +1,5 @@
 import { Post } from "#site/content";
-import React from "react";
+import React, { ViewTransition } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -29,21 +29,23 @@ const PostItem: React.FC<PostItemProps> = ({
             href={`/blog/${slugAsParams}`}
             className="el-focus-styles group flex gap-4 rounded-md"
           >
-            <div className="flex-shrink-0 overflow-hidden rounded-md">
-              <div className="relative h-20 w-32">
-                <Image
-                  src={cover}
-                  alt={title}
-                  fill
-                  priority
-                  quality={95}
-                  className="size-full object-cover"
-                  sizes="128px"
-                />
+            <ViewTransition name={`post-cover-${slugAsParams}`}>
+              <div className="flex-shrink-0 overflow-hidden rounded-md">
+                <div className="relative h-20 w-32">
+                  <Image
+                    src={cover}
+                    alt={title}
+                    fill
+                    priority
+                    quality={95}
+                    className="size-full object-cover"
+                    sizes="128px"
+                  />
+                </div>
               </div>
-            </div>
+            </ViewTransition>
             <div className="min-w-0 flex-1">
-              <PostMetadata title={title} metadata={metadata} date={date} />
+              <PostMetadata title={title} metadata={metadata} date={date} slug={slugAsParams} />
               <p className="mb-2 mt-1 line-clamp-2 font-sans text-sm text-muted-foreground">
                 {description}
               </p>
@@ -62,20 +64,22 @@ const PostItem: React.FC<PostItemProps> = ({
           href={`/blog/${slugAsParams}`}
           className="el-focus-styles group inline-block w-full rounded-md"
         >
-          <div className="mb-4 overflow-hidden rounded-md">
-            <div className="relative aspect-video w-full">
-              <Image
-                src={cover}
-                alt={title}
-                fill
-                priority
-                quality={95}
-                className="size-full object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+          <ViewTransition name={`post-cover-${slugAsParams}`}>
+            <div className="mb-4 overflow-hidden rounded-md">
+              <div className="relative aspect-video w-full">
+                <Image
+                  src={cover}
+                  alt={title}
+                  fill
+                  priority
+                  quality={95}
+                  className="size-full object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </div>
             </div>
-          </div>
-          <PostMetadata title={title} metadata={metadata} date={date} />
+          </ViewTransition>
+          <PostMetadata title={title} metadata={metadata} date={date} slug={slugAsParams} />
         </Link>
 
         <p className={"mb-2 mt-1 line-clamp-2 font-sans text-sm text-muted-foreground"}>

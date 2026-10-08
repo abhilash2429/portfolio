@@ -1,6 +1,6 @@
 import { Post } from "#site/content";
 import { Calendar, Timer } from "lucide-react";
-import React from "react";
+import React, { ViewTransition } from "react";
 import { cn, formatDate } from "~/lib/utils";
 import PostViews from "./post-views";
 
@@ -10,17 +10,24 @@ interface PostMetaProps {
   metadata: Post["metadata"];
   isDetailPage?: boolean;
   views?: number;
+  /** Pairs the title with the same post elsewhere for the route morph */
+  slug?: string;
 }
-const PostMetadata: React.FC<PostMetaProps> = ({ title, date, metadata, isDetailPage, views }) => {
+const PostMetadata: React.FC<PostMetaProps> = ({ title, date, metadata, isDetailPage, views, slug }) => {
+  // On a post page the title is the document's only h1. In a listing it is one
+  // item among many, so it stays an h3 under the page's own heading.
+  const Title = isDetailPage ? "h1" : "h3";
   return (
     <hgroup className={cn("space-y-2 p-0", { "p-0": isDetailPage })}>
-      <h3
-        className={cn(`font-serif text-xl transition-colors group-hover:text-ring`, {
-          "text-2xl": isDetailPage,
-        })}
-      >
-        {title}
-      </h3>
+      <ViewTransition name={slug ? `post-title-${slug}` : undefined}>
+        <Title
+          className={cn(`w-fit font-serif text-xl transition-colors group-hover:text-ring`, {
+            "text-2xl": isDetailPage,
+          })}
+        >
+          {title}
+        </Title>
+      </ViewTransition>
 
       <div
         className={cn("flex items-center gap-2", {
