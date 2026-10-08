@@ -93,6 +93,81 @@ html[data-intro="pending"] .nav-drop-in {
   }
 }
 
+/* Directional fold-slide: forward (Home -> Projects -> Blog -> post) brings the
+   new page in from the right, back brings it in from the left. */
+html[data-nav-dir]::view-transition-image-pair(page) {
+  isolation: auto;
+}
+
+html[data-nav-dir]::view-transition-old(page),
+html[data-nav-dir]::view-transition-new(page) {
+  mix-blend-mode: normal;
+  backface-visibility: hidden;
+}
+
+html[data-nav-dir="forward"]::view-transition-old(page) {
+  transform-origin: left center;
+  animation: vt-fold-out-left 0.5s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+html[data-nav-dir="forward"]::view-transition-new(page) {
+  transform-origin: right center;
+  animation: vt-fold-in-right 0.85s cubic-bezier(0.33, 1, 0.68, 1) 0.08s both;
+}
+
+html[data-nav-dir="back"]::view-transition-old(page) {
+  transform-origin: right center;
+  animation: vt-fold-out-right 0.5s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+html[data-nav-dir="back"]::view-transition-new(page) {
+  transform-origin: left center;
+  animation: vt-fold-in-left 0.85s cubic-bezier(0.33, 1, 0.68, 1) 0.08s both;
+}
+
+@keyframes vt-fold-in-right {
+  from {
+    opacity: 0;
+    transform: perspective(1600px) translateX(38%) rotateY(-32deg) scale(0.94);
+  }
+}
+
+@keyframes vt-fold-out-left {
+  to {
+    opacity: 0;
+    transform: perspective(1600px) translateX(-28%) rotateY(26deg) scale(0.94);
+  }
+}
+
+@keyframes vt-fold-in-left {
+  from {
+    opacity: 0;
+    transform: perspective(1600px) translateX(-38%) rotateY(32deg) scale(0.94);
+  }
+}
+
+@keyframes vt-fold-out-right {
+  to {
+    opacity: 0;
+    transform: perspective(1600px) translateX(28%) rotateY(-26deg) scale(0.94);
+  }
+}
+
+/* Theme switch: the new theme paints out from the toggle (clip-path set from
+   JS), so nothing else in the transition should animate. */
+html[data-vt="theme"]::view-transition-old(root),
+html[data-vt="theme"]::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+html[data-vt="theme"]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-vt="theme"]::view-transition-new(root) {
+  z-index: 2;
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),

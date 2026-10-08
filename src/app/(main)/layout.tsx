@@ -1,6 +1,7 @@
 import { ReactNode, ViewTransition } from "react";
 import Footer from "~/components/layout/footer";
 import Navbar from "~/components/layout/nav";
+import RouteDirection from "~/components/route-direction";
 import SkipContent from "~/components/ui/skip-content";
 
 const Layout = ({ children }: { children: ReactNode }) => {
@@ -8,6 +9,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <div className="container relative flex min-h-dvh flex-col space-y-4 py-2">
       <div className="!mb-6 space-y-4">
         <SkipContent />
+        <RouteDirection />
         <Navbar />
         <ViewTransition name="page">
           <div>{children}</div>
