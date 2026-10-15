@@ -1,0 +1,67 @@
+---
+title: "Enterprise Search"
+project: "enterprise-search"
+description: "Ask a question about a company's internal knowledge and get an answer where every claim cites the document it came from. 512K documents, served to agents over MCP."
+meta: "Oct 2026. Built against EnterpriseRAG-Bench, run once on a held-out test split."
+date: "2026-10-06"
+published: true
+---
+
+A company's knowledge lives in Slack, email, tickets, docs and a handful of other tools. The benchmark I built against, EnterpriseRAG-Bench, has 512K documents across nine of those sources. The job: answer a question with every claim cited to its document, and say so when the documents don't hold the answer.
+
+I built it against a published benchmark so every design choice is backed by a number, and I ran the final system once on a held-out test split nobody tuned on.
+
+<video autoPlay loop muted playsInline className="my-6 w-full rounded-lg shadow-sm">
+  <source src="/previews/enterprise-search.mp4" type="video/mp4" />
+</video>
+
+## The pipeline
+
+1. **Route.** A model picks 1 to 3 of the 9 sources likely to hold the answer.
+2. **Retrieve.** Four ranked lists of 100 docs: a hand-written BM25 that matches Lucene's tokenizer, dense search with Qwen3-Embedding-0.6B over 1.54M chunks, and both again restricted to the routed sources.
+3. **Fuse.** Reciprocal rank fusion over the four lists.
+4. **Rerank.** Qwen3-Reranker-0.6B scores the top 100 and keeps 10.
+5. **Answer.** The answerer cites every claim, prefers the newest version when two docs look like versions of each other, and abstains with a fixed sentence when the docs don't answer.
+6. **Verify.** A model from a different family checks each cited claim against its document and sets a confidence flag. The flag never changes the answer.
+
+## Served to agents
+
+`entsearch-mcp` exposes the indexes to any MCP client, so an agent or Claude Code can use company search as a tool.
+
+| Tool | Returns |
+|---|---|
+| `search(query, k)` | Top docs with source, title, snippet and scores, the routed sources, per-stage timings |
+| `answer(question)` | A cited answer with each `[n]` mapped to a doc id, abstention flags, the verifier's per-claim verdicts, and cost |
+| `get_document(doc_id)` | Full text of one document |
+
+## Results
+
+Held-out test, 350 questions, 3 generation seeds, config locked on dev before test was touched.
+
+| | BM25 baseline | This system |
+|---|---|---|
+| Combined score | 47.7 | 67.9 |
+| Recall@10 | 70.2 | 82.2 |
+| Generation cost per question | $0.0028 | $0.0028 |
+
+That's +20.1 over the paper's BM25 baseline, with a 95% confidence interval of +15.7 to +24.5.
+
+Two checks so the numbers mean something. I reproduced the paper's BM25 baseline exactly, overall and in each question type. And I validated the LLM judge against 100 answers I hand-labeled blind: true positive rate 0.91, true negative rate 0.94.
+
+I also ran the benchmark's own file agent, driven by a frontier model, on dev. It scored 58.5 against 57.9 for the pipeline without the router, at 7.6x the cost per question and 79x the input tokens.
+
+## What I learned
+
+**Prompting the answerer mattered more than any retrieval change after reranking.** Better retrieval with the benchmark's prompt was +3.3 over BM25 and not significant. The same retrieval with the cited answerer was +15.7.
+
+**The source router did not replicate.** On dev it added +4.4 end to end. On test it's −0.1. It stays in the headline because that was the call made on dev before test was run, and I report the test result as is.
+
+**When the system is wrong, it rarely says so.** On test, 20% of answered questions are wrong, and the answerer abstains on under 1% of answerable ones. The verifier flag catches about 70% of wrong answers. An unflagged answer is right about 90% of the time.
+
+**Binary quantization with rescoring is free.** Sign bits plus an fp16 rescore of a 4x shortlist match exact search (67.5 vs 67.6) with a 197 MB index in memory instead of 3.15 GB.
+
+## Limitations
+
+- The generator and judge are the same model (gpt-oss-120b on Bedrock). The judge is validated against hand labels, but scores aren't comparable to the paper's leaderboard.
+- The questions and corpus are synthetic. Routing and near-duplicate behaviour may differ on real company data.
+- Reranking 100 long documents dominates latency on a 6 GB laptop GPU, about 34 seconds at p50. Rerank depth 20 keeps recall within noise at a fifth of the work.

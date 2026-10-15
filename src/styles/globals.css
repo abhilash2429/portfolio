@@ -26,8 +26,19 @@ html.lenis body {
   }
 
   ::selection {
-    @apply bg-ring/20 text-foreground;
+    @apply bg-pen/20 text-foreground;
   }
+
+  /* The single reading column every text section sits in */
+  .col {
+    @apply mx-auto w-full max-w-[652px] px-4;
+  }
+}
+
+/* Desk objects wait for the first-visit curtain, then settle in */
+html[data-intro="pending"] .settle,
+html[data-intro="pending"] .circled path {
+  animation-play-state: paused;
 }
 
 /* ── First-visit intro gate ──

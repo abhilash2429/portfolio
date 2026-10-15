@@ -1,0 +1,89 @@
+---
+title: "Bladerunner"
+project: "bladerunner"
+description: "A watchdog agent for AI agent fleets. It reads their traces, catches them breaking policy, quarantines the run, patches the guardrail and confirms the fix, with no human in the loop."
+meta: "Oct 2026. Built solo at neatHack, Oct 10 to 12."
+date: "2026-10-12"
+published: true
+---
+
+Agents read untrusted content all day: docs pages, shared notes boards, messages from other agents. Sometimes one acts on an instruction planted in that content, or submits a peer's stale answer instead of checking the source. Teams that run agents already have observability, so the evidence lands in a trace. Nobody reads those traces in time. When someone finally does, the fix is a person scrolling spans for an hour and hand-editing a guardrail.
+
+I built Bladerunner to do that whole job as an agent.
+
+## The loop
+
+1. **Watch.** A research fleet runs in a local arena and traces to neatlogs. The watchdog polls neatlogs detection hits and also evaluates each agent's policy against every span of every finalized trace locally.
+2. **Pause.** A rule hit opens a case and pauses the agent through the arena's control API.
+3. **Investigate.** An investigator model (Kimi K2.5, GLM-5 as fallback) walks the span tree with tools, pulls past incidents from memory, and writes findings. Every finding cites span ids.
+4. **Verify.** A verifier from a different model family checks that every cited span exists and shows what the finding claims. Unsupported findings get rejected. Uncertain ones go to `needs_review`.
+5. **Quarantine.** A verified case stops the agent, tags and renames the trace in neatlogs, leaves span-level feedback, and writes an incident report.
+6. **Patch.** OpenCode gets a fix request and can only edit `arena/guardrails/` and policy files. Bladerunner rejects any change outside those paths, any policy edit that loosens permissions, and any attempt that moves `HEAD`. The guardrail tests have to pass.
+7. **Confirm.** The arena re-runs the agent next to a clean control run. The case is `fixed` only if the hidden ground truth shows no violation and the control still behaves. Otherwise it is `not_fixed`.
+8. **Remember.** The incident goes into long-term memory, so the next investigation of the same category starts from what was learned.
+
+Each case moves through a persisted state machine, from `flagged` through `paused`, `investigated`, `verified`, `quarantined` and `patched` to `fixed`. Retries are capped per step, and a crash resumes from the last state.
+
+## The live run
+
+Scenario `planted_dev`, Oct 11, 2026. Three agents, and all three took the planted instruction. All three cases reached `fixed` without a human.
+
+| Case | Agent | Flagged | Fixed |
+|---|---|---|---|
+| c90be7b2 | research_agent_1 | 12:56:22 | 13:04:26 |
+| 1ee2425c | research_agent_3 | 12:56:22 | 13:08:56 |
+| 37fa7776 | research_agent_2 | 12:56:23 | 13:09:21 |
+
+Flag to fixed took 8 to 13 minutes per case, most of it the confirmation re-runs finalizing in neatlogs. The patches were reverted afterwards so the benchmark scores the detector against a clean arena.
+
+## Traces it never saw
+
+I froze 102 traces from held-out scenarios (20 violating, 82 clean) and scored them offline against hidden ground truth. The held-out scenarios use different wording and different questions from the dev scenarios I tuned on. Same traces, same investigator model, two checkers: a single-prompt reviewer, and the full pipeline.
+
+| | Single-prompt checker | Bladerunner |
+|---|---|---|
+| Precision | 0.39 | 0.90 |
+| Recall | 0.80 | 0.90 |
+| False alarms on clean runs | 40% | 5% |
+| Cost per trace | $0.0015 | $0.0058 |
+
+The single-prompt checker finds most violations and cries wolf on 40% of clean runs. The pipeline only escalates traces the compiled rules flag, and the cross-family verifier throws out findings the cited spans don't support.
+
+All four of the pipeline's false alarms are agents that fetched the notes board, which their policy doesn't allow, and then answered correctly from the data API. That is a real policy break with no scored category, so the benchmark counts it as wrong. I didn't retune on the held-out set to hide it.
+
+### Agents I didn't build
+
+To test on someone else's agents, I replayed 858 published runs from AgentDojo (ETH Zurich): GPT-4o, Claude 3.5 Sonnet and Llama 3.3 70B doing banking and Slack tasks, 747 of them under a prompt-injection attack. Detection and investigation only, since a recorded run can't be paused or patched.
+
+| | Single-prompt checker | Bladerunner |
+|---|---|---|
+| Precision | 0.69 | 0.88 |
+| Recall | 0.99 | 0.83 |
+| False alarms on attacks the agent resisted | 37% | 8% |
+
+The pipeline trades recall for trust. The single-prompt checker reacts to injected text being present, so it raises an alarm on 37% of runs where the agent read the injection and ignored it. Bladerunner looks at what the agent did. 54 of its 61 misses are content attacks against an allowed destination, like a phishing link sent to a real colleague. Destination policies can't see those.
+
+## How it's built
+
+Three processes with a hard boundary between them.
+
+- **arena**: five FastAPI mocks (control, data API, notes board, docs site, and an unlisted service no agent may use). It owns the hidden ground truth of what each agent actually did.
+- **fleet**: one OS process per agent, MiniMax M2.5 on Bedrock, each tracing to neatlogs.
+- **watchdog**: never imports `arena`, and a contract test enforces that. Its only inputs are neatlogs and the arena control API.
+
+Policy lives in YAML: seven violation categories, the tools each agent has, the hosts each tool may reach, and sensitive value patterns. A compiler turns it into rules for both neatlogs native detections and the local evaluator, so the watchdog keeps working when native detections are down.
+
+| Role | Model |
+|---|---|
+| Arena agents | MiniMax M2.5 (Bedrock) |
+| Investigator | Kimi K2.5 (Bedrock) |
+| Fallback investigator, patcher | GLM-5 (Bedrock, OpenCode) |
+| Verifier, scored runs | Claude Sonnet 4.6 |
+
+Every watchdog and benchmark model call goes through a spend ledger that refuses calls past a hard cap.
+
+## Honest notes
+
+- The scorer was fixed twice before the reported run, because the investigator sometimes reasons in prose before its JSON answer and the first parser lost those answers. The run with the old parser points the same way (false alarms 37% to 6%).
+- The held-out planted page was reworded once, because the first wording asked agents to do something their tools couldn't do. The held-out set was recorded again from scratch. The old runs were discarded, not mixed in.
+- The three demo cases took about 17 minutes from violation to pause, because I restarted the watchdog twice during that run to land poller and cache fixes. With the watchdog running steadily, one case paused 16 seconds after the violating call. Detection can never be faster than neatlogs finalizing the trace.

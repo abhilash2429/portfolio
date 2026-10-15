@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { LampDesk } from "lucide-react";
 import { useTheme } from "next-themes";
 import { MouseEvent } from "react";
 import { flushSync } from "react-dom";
@@ -16,10 +16,10 @@ const ThemeToggle = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="size-8 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+        className="size-8 rounded-lg text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
         aria-label="Toggle theme"
       >
-        <Moon className="size-4" />
+        <LampDesk className="size-[17px]" />
       </Button>
     );
   }
@@ -68,11 +68,11 @@ const ThemeToggle = () => {
     <Button
       variant="ghost"
       size="icon"
-      className="size-8 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+      className="size-8 rounded-lg text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
       onClick={toggle}
-      aria-label={`Switch to ${nextTheme} mode`}
+      aria-label={isDark ? "Turn the desk lamp off (light mode)" : "Turn the desk lamp on (dark mode)"}
     >
-      {isDark ? <Moon className="size-4" /> : <Sun className="size-4" />}
+      <LampDesk className="size-[17px]" />
     </Button>
   );
 };

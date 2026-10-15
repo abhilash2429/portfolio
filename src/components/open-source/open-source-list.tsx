@@ -1,56 +1,39 @@
-import { GoGitMerge, GoGitPullRequest } from "react-icons/go";
-import BlurText from "~/components/ui/blur-text";
-import { CustomLink } from "../mdx";
-import { typo } from "../ui/typograpghy";
+import { MergedIcon, OpenPrIcon } from "~/components/desk/icons";
+import RowList, { SectionHead } from "~/components/ui/row-list";
+import { cn } from "~/lib/utils";
 import { TContribution } from "./_open-source-data";
 
-type OpenSourceListProps = {
-  contributions: TContribution[];
-};
-
-const OpenSourceList = ({ contributions }: OpenSourceListProps) => {
+const Status = ({ status }: { status: TContribution["status"] }) => {
+  const merged = status === "merged";
+  const Icon = merged ? MergedIcon : OpenPrIcon;
   return (
-    <section aria-label="open source contributions" className="mt-5 space-y-6">
-      <h2 className={typo({ variant: "h2" })}>
-        <BlurText text="Open Source" />
-      </h2>
-
-      <ol role="list" className="!mt-8 space-y-3">
-        {contributions.map((contribution) => {
-          const isMerged = contribution.status === "merged";
-          const Icon = isMerged ? GoGitMerge : GoGitPullRequest;
-
-          return (
-            <li key={contribution.id} role="listitem">
-              <CustomLink
-                href={contribution.url}
-                className="!p-0 flex min-w-0 items-center gap-3 hover:!text-ring"
-              >
-                <Icon
-                  size={16}
-                  aria-hidden
-                  className={
-                    isMerged
-                      ? "shrink-0 text-[#8250df]"
-                      : "shrink-0 text-[#1a7f37] dark:text-[#3fb950]"
-                  }
-                />
-                <span className="sr-only">
-                  {isMerged ? "merged pull request" : "open pull request"}
-                </span>
-                <span className="shrink-0 font-mono text-sm text-muted-foreground">
-                  {contribution.repo}#{contribution.number}
-                </span>
-                <span className="truncate text-sm text-foreground">
-                  {contribution.title}
-                </span>
-              </CustomLink>
-            </li>
-          );
-        })}
-      </ol>
-    </section>
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[13px]",
+        merged
+          ? "bg-[#8250df]/10 text-[#8250df] dark:text-[#b392f0]"
+          : "bg-[#1a7f37]/10 text-[#1a7f37] dark:text-[#56d364]",
+      )}
+    >
+      <Icon className="size-[13px]" />
+      {status}
+    </span>
   );
 };
+
+const OpenSourceList = ({ contributions }: { contributions: TContribution[] }) => (
+  <section aria-labelledby="open-source">
+    <SectionHead title="Open source" id="open-source" />
+    <RowList
+      rows={contributions.map((c) => ({
+        key: c.id,
+        title: c.title,
+        description: `${c.repo} #${c.number}`,
+        aside: <Status status={c.status} />,
+        href: c.url,
+      }))}
+    />
+  </section>
+);
 
 export default OpenSourceList;

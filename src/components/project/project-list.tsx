@@ -1,30 +1,27 @@
+import { projectHref } from "~/components/desk/artifacts";
 import ContentNotFound from "../ui/content-not-found";
-import { typo } from "../ui/typograpghy";
-import BlurText from "~/components/ui/blur-text";
-import { TProject } from "./_project-mock";
+import RowList from "../ui/row-list";
+import { TProject, formatMonth } from "./_project-mock";
 
-import ProjectItem from "./project-item";
-
-const ProjectList = ({ projects, metadata }: { projects: TProject[]; metadata?: boolean }) => {
-  return (
-    <section aria-label="projects" className="mt-5 space-y-6" id="main-content">
-      {metadata && <h2 className={typo({ variant: "h2" })}>
-   <BlurText text="Featured Projects" />
- </h2>}
-
-      <div className="!mt-8">
-        {projects.length > 0 ? (
-          <ol className="grid gap-8 md:grid-cols-2" role="list">
-            {projects.map((project, index) => (
-              <ProjectItem key={project.id} index={index} {...project} />
-            ))}
-          </ol>
-        ) : (
-          <ContentNotFound text="No Projects Found" />
-        )}
-      </div>
-    </section>
+/** Archive rows: title and one line, date on the right */
+const ProjectList = ({ projects }: { projects: TProject[] }) =>
+  projects.length > 0 ? (
+    <RowList
+      rows={projects.map((p) => ({
+        key: p.slug,
+        title: (
+          <>
+            {p.title}
+            {p.caseStudy && <span className="ml-2 font-hand text-lg text-pen">case study</span>}
+          </>
+        ),
+        description: p.summary,
+        aside: formatMonth(p.date),
+        href: projectHref(p),
+      }))}
+    />
+  ) : (
+    <ContentNotFound text="No projects found" />
   );
-};
 
 export default ProjectList;

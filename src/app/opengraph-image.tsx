@@ -16,18 +16,19 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "80px",
-          background: "#000",
-          color: "#fff",
+          background: "#f2efe8",
+          color: "#1c1b18",
         }}
       >
-        <div style={{ fontSize: 28, opacity: 0.6 }}>{config.domainName}</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div style={{ fontSize: 28, color: "#8b867b" }}>{config.domainName}</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ fontSize: 84, fontWeight: 600 }}>{config.appName}</div>
-          <div style={{ fontSize: 40, opacity: 0.85 }}>
-            {`${config.appDesignation}. Agents, evals, backend.`}
+          <div style={{ display: "flex", fontSize: 44, color: "#57534b" }}>
+            {`${config.appDesignation}. I build AI agents that do the work.`}
           </div>
+          <div style={{ width: 220, height: 4, background: "#b8332a", borderRadius: 2 }} />
         </div>
-        <div style={{ fontSize: 26, opacity: 0.6 }}>Open to full-time remote roles</div>
+        <div style={{ fontSize: 26, color: "#8b867b" }}>Open to full-time remote roles</div>
       </div>
     ),
     size,

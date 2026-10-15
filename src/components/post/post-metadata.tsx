@@ -21,8 +21,8 @@ const PostMetadata: React.FC<PostMetaProps> = ({ title, date, metadata, isDetail
     <hgroup className={cn("space-y-2 p-0", { "p-0": isDetailPage })}>
       <ViewTransition name={slug ? `post-title-${slug}` : undefined}>
         <Title
-          className={cn(`w-fit font-serif text-xl transition-colors group-hover:text-ring`, {
-            "text-2xl": isDetailPage,
+          className={cn(`w-fit font-serif text-xl transition-colors group-hover:text-pen`, {
+            "text-[34px] leading-[1.1] sm:text-[40px]": isDetailPage,
           })}
         >
           {title}
@@ -37,8 +37,8 @@ const PostMetadata: React.FC<PostMetaProps> = ({ title, date, metadata, isDetail
         <dl>
           <dt className="sr-only">Published on</dt>
           <dd
-            className={cn("flex items-center gap-1 text-xs text-muted-foreground", {
-              "block gap-2 text-sm": isDetailPage,
+            className={cn("flex items-center gap-1 text-xs text-subtle", {
+              "block gap-2 text-[13.5px]": isDetailPage,
             })}
           >
             {isDetailPage ? (
@@ -56,8 +56,8 @@ const PostMetadata: React.FC<PostMetaProps> = ({ title, date, metadata, isDetail
           <dl>
             <dt className="sr-only">Reading time</dt>
             <dd
-              className={cn("flex items-center gap-1 text-xs text-muted-foreground", {
-                "gap-1 text-sm": isDetailPage,
+              className={cn("flex items-center gap-1 text-xs text-subtle", {
+                "gap-1 text-[13.5px]": isDetailPage,
               })}
             >
               <Timer className={cn("size-3", { "size-4": isDetailPage })} aria-hidden="true" />

@@ -1,11 +1,12 @@
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
-import { fontMono, fontSans, fontSerif } from "~/components/ui/fonts";
+import { fontHand, fontMono, fontSans, fontSerif } from "~/components/ui/fonts";
 import { getSEOTags, renderSchemaTags } from "~/lib/seo";
 import { cn } from "~/lib/utils";
 import { INTRO_BOOT_SCRIPT } from "~/components/intro-store";
 import RootProviders from "~/providers";
 import "~/styles/globals.css";
+import "~/styles/desk.css";
 
 export const viewport = {
   viewportFit: "cover",
@@ -14,8 +15,8 @@ export const viewport = {
   maximumScale: 3,
   userScalable: true,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#f2efe8" },
+    { media: "(prefers-color-scheme: dark)", color: "#141310" },
   ],
 };
 
@@ -38,6 +39,7 @@ export default function RootLayout({
           fontSans.variable,
           fontSerif.variable,
           fontMono.variable,
+          fontHand.variable,
         )}
       >
         {renderSchemaTags()}

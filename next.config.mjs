@@ -16,6 +16,11 @@ const nextConfig = {
   redirects: async () => {
     return [
       {
+        source: "/projects",
+        destination: "/work",
+        permanent: true,
+      },
+      {
         source: "/resume",
         destination:
           "https://drive.google.com/file/d/1H0mKGg6zKlIv4JX1op4lCwsDkWdYutu4/view?usp=sharing",

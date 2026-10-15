@@ -1,46 +1,39 @@
-import { createId } from "@paralleldrive/cuid2";
-
 export type THackathon = {
   id: string;
   title: string;
   role: string;
   date: string;
   link?: string;
-  description: string[];
+  summary: string;
 };
 
 const hackathons: THackathon[] = [
   {
-    id: createId(),
+    id: "tcs-ai",
     title: "TCS AI Hackathon",
-    role: "Winner",
-    date: "July 2026",
+    role: "winner",
+    date: "Jul 2026",
     link: "https://drive.google.com/file/d/10CNecnstq9_I7sGFySNo0rsbjeyZCStA/view?usp=sharing",
-    description: [
-      "Won first place with a 5-person team, ahead of roughly 30 teams (about 150 participants) at a college AI hackathon hosted by TCS.",
-      "Built an AI agent that ingests bulk customer feedback and turns it into structured output: complaint categories, sentiment trends, and actionable insights.",
-    ],
+    summary:
+      "First place with a 5-person team. An agent that turns bulk customer feedback into complaint categories, sentiment trends and next actions.",
   },
   {
-    id: createId(),
-    title: "Meta x PyTorch x OpenEnv x Scaler Hackathon",
-    role: "Grand Finalist",
+    id: "openenv",
+    title: "Meta PyTorch OpenEnv Hackathon",
+    role: "grand finalist",
     date: "May 2026",
     link: "https://drive.google.com/file/d/1WuTUidWNzSoFeN349NXxyhVj-Tt4AKbd/view",
-    description: [
-      "Cleared Round 1 solo out of 52,000+ registrants (roughly the top 0.1%), building GitMergeEnv, an RL environment for git merge conflict resolution with three difficulty tiers, a deterministic grader, and reward shaping tuned toward better fixes.",
-      "Advanced to the in-person Grand Finale in Bangalore with Oversight Arena, a five-worker pipeline that moves through requirement analysis, codegen, test generation, security review, and deploy approval, with two adversarial mechanics (hidden-flaw state & colluding-pair mode). Trained Qwen2.5-3B against it with GRPO.",
-    ],
+    summary:
+      "Cleared Round 1 solo with GitMergeEnv, then took Oversight Arena to the in-person grand finale in Bangalore.",
   },
   {
-    id: createId(),
+    id: "iith",
     title: "IIT Hyderabad Innovation Hackathon",
-    role: "Finalist",
-    date: "March 2026",
+    role: "finalist",
+    date: "Mar 2026",
     link: "https://drive.google.com/file/d/12bqjwjR-m-M1cy7cO535n9wDSOPxa5L8/view",
-    description: [
-      "Built Intelli-Credit, an AI credit-appraisal engine with distributed Celery pipelines and XGBoost risk scoring; reached the finals among competing student teams.",
-    ],
+    summary:
+      "Intelli Credit, an AI credit appraisal engine with Celery pipelines and XGBoost risk scoring.",
   },
 ];
 

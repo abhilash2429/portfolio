@@ -1,8 +1,8 @@
 import { posts } from "#site/content";
-import React from "react";
-import { CustomLink } from "~/components/mdx";
+import Link from "next/link";
 import { PostList } from "~/components/post";
-import { getPostsByTagSlug } from "~/lib/utils";
+import { SectionHead } from "~/components/ui/row-list";
+import { getPostsByTagSlug, sortPosts } from "~/lib/utils";
 
 interface TagDetailPageProps {
   params: Promise<{
@@ -13,18 +13,28 @@ interface TagDetailPageProps {
 const TagDetailPage = async ({ params }: TagDetailPageProps) => {
   const { tag } = await params;
   const title = tag.split("-").join(" ");
-  const displayPosts = getPostsByTagSlug(posts, tag);
+  const displayPosts = sortPosts(
+    getPostsByTagSlug(
+      posts.filter((post) => post.published),
+      tag,
+    ),
+  );
 
   return (
-    <div className="!mt-8">
-      <h2 className="rounded-md bg-neutral-800/50 p-2 text-center text-xl">Tagged [ {title} ]</h2>
-
-      <PostList posts={displayPosts} showRss={false} />
-
-      <h3 className="mt-4 text-muted-foreground" id="main-nav">
-        Alternatively, <CustomLink href="/tags">choose from all tags</CustomLink> or{" "}
-        <CustomLink href="/blog">view all posts</CustomLink>
-      </h3>
+    <div className="col pb-10 pt-28 sm:pt-32">
+      <SectionHead as="h1" title={`#${title}`} />
+      <PostList posts={displayPosts} />
+      <p className="mt-6 text-sm text-muted-foreground" id="main-nav">
+        Or browse{" "}
+        <Link href="/tags" className="underline underline-offset-2 hover:text-pen">
+          all tags
+        </Link>{" "}
+        and{" "}
+        <Link href="/blog" className="underline underline-offset-2 hover:text-pen">
+          all writing
+        </Link>
+        .
+      </p>
     </div>
   );
 };

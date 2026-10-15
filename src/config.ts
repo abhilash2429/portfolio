@@ -3,13 +3,13 @@ import { ConfigProps } from "./types/config";
 export const config = {
   appName: "Abhilash Reddy",
   appDesignation: "Applied AI Engineer",
-  appDescription: `Applied AI engineer building agents, evals and the backend behind them. Open to full-time remote roles.`,
+  appDescription: `Applied AI engineer building AI agents that do the work, and the systems they plug into. Open to full-time remote roles.`,
 
   domainName: "abhilash24.me",
 
   colors: {
-    theme: "dark",
-    main: "#000000",
+    theme: "light",
+    main: "#f2efe8",
   },
 
   social: {

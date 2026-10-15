@@ -2,13 +2,12 @@
 
 import { Post } from "#site/content";
 import Image from "next/image";
+import Link from "next/link";
 import { ViewTransition } from "react";
-import BackButton from "~/components/back-btn";
 import Comments from "~/components/comments";
 import { MDXContent } from "~/components/mdx";
 import { PostMetadata, TableOfContent } from "~/components/post";
 import Tags from "~/components/tags";
-import { cn } from "~/lib/utils";
 
 interface BlogDetailClientProps {
   post: Post;
@@ -17,9 +16,12 @@ interface BlogDetailClientProps {
 
 export default function BlogDetailClient({ post, views }: BlogDetailClientProps) {
   return (
-    <article className="w-full">
-      <BackButton>Back to posts</BackButton>
-      <div className="mb-6 mt-2 space-y-6">
+    <article className="col pb-10 pt-28 sm:pt-32">
+      <Link href="/blog" className="text-sm text-muted-foreground hover:text-pen">
+        &larr; All writing
+      </Link>
+
+      <div className="mb-10 mt-6 space-y-8">
         <PostMetadata
           isDetailPage
           title={post.title}
@@ -29,35 +31,38 @@ export default function BlogDetailClient({ post, views }: BlogDetailClientProps)
           slug={post.slugAsParams}
         />
 
-        <TableOfContent toc={post.toc} />
-
         <ViewTransition name={`post-cover-${post.slugAsParams}`}>
-          <div className="relative aspect-video">
-            <Image
-              src={post.cover}
-              alt={post.title}
-              priority
-              fill
-              quality={75}
-              className="size-full rounded-md object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          </div>
+          <span className="cover-print !w-full">
+            <span className="obj-face">
+              <span className="relative block aspect-[1200/630]">
+                <Image
+                  src={post.cover}
+                  alt=""
+                  priority
+                  fill
+                  sizes="(max-width: 652px) 100vw, 620px"
+                  className="object-cover"
+                />
+              </span>
+            </span>
+          </span>
         </ViewTransition>
+
+        <TableOfContent toc={post.toc} />
       </div>
 
-      <main id="main-content" className={cn("mdx-content prose dark:prose-invert max-w-none")}>
+      <div className="mdx-content prose max-w-none dark:prose-invert">
         <MDXContent code={post.body} />
-      </main>
-
-      <div className="my-4 space-y-1">
-        <hr className="!mb-4" />
-        <h3 className="font-serif text-xl">Tags</h3>
-        <Tags tags={post.tags} />
       </div>
 
-      <section className="mt-8">
-        <hr className="mb-6" />
+      <div className="mt-12 border-t border-foreground/10 pt-6">
+        <h2 className="font-serif text-xl">Tags</h2>
+        <div className="mt-2">
+          <Tags tags={post.tags} />
+        </div>
+      </div>
+
+      <section className="mt-10 border-t border-foreground/10 pt-6">
         <h2 className="mb-4 font-serif text-2xl">Comments</h2>
         <Comments />
       </section>
