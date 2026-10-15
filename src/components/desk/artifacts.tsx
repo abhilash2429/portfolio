@@ -30,12 +30,14 @@ const Incident = ({ project, href, style }: ArtifactProps) => (
       <dd>13:04:26</dd>
     </dl>
     <div className="incident-chain">
-      {["flagged", "paused", "investigated", "verified", "quarantined", "patched"].map((s) => (
-        <span key={s}>
+      {["flagged", "paused", "investigated", "verified", "quarantined", "patched"].map((s, i) => (
+        <span key={s} style={{ "--i": i } as CSSProperties}>
           {s} <em>&rarr;</em>
         </span>
       ))}
-      <span className="incident-fixed">fixed</span>
+      <span className="incident-fixed" style={{ "--i": 6 } as CSSProperties}>
+        fixed
+      </span>
     </div>
   </DeskObject>
 );

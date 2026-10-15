@@ -4,6 +4,7 @@ import ContactDesk from "~/components/desk/contact-desk";
 import { getContributions } from "~/components/desk/github-strip";
 import HeroDesk from "~/components/desk/hero-desk";
 import Notes from "~/components/desk/notes";
+import Path from "~/components/desk/path";
 import WorkDesk from "~/components/desk/work-desk";
 import { EducationList, educationList } from "~/components/education";
 import { HackathonList, hackathons } from "~/components/hackathons";
@@ -54,6 +55,8 @@ const HomePage = async () => {
           <ProjectList projects={projects.filter((p) => !p.onDesk)} />
         </Reveal>
       </section>
+
+      <Path />
 
       {latest && (
         <Reveal className="col mt-[90px] sm:mt-[140px]">

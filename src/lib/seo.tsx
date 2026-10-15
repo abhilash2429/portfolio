@@ -31,7 +31,7 @@ export const getSEOTags = ({
     applicationName: config.appName,
 
     icons: {
-      icon: "/logo.png",
+      icon: "/mark.svg",
       apple: "/logo.png",
     },
 

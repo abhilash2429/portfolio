@@ -1,9 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { FiMail } from "react-icons/fi";
 import config from "~/config";
+import LogoMark from "~/components/ui/logo-mark";
 import ThemeToggle from "~/components/ui/theme-toggle";
+import ViewSwitch from "~/components/view-switch";
 import NavList from "./nav-list";
 
 const iconBtn =
@@ -17,14 +18,15 @@ const Navbar = () => (
     <Link
       href="/"
       aria-label={`${config.appName}, home`}
-      className="el-focus-styles block size-[30px] overflow-hidden rounded-lg shadow-[var(--desk-shadow)]"
+      className="el-focus-styles group block size-[34px] rounded-lg"
     >
-      <Image src="/logo.png" alt="" width={30} height={30} priority />
+      <LogoMark className="size-full" />
     </Link>
     <div className="flex justify-center">
       <NavList />
     </div>
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center justify-end gap-1.5 sm:gap-2">
+      <ViewSwitch className="mr-1 hidden md:inline-flex" />
       <a
         href={config.social.github}
         target="_blank"

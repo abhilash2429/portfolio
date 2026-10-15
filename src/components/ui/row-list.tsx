@@ -8,6 +8,8 @@ export type Row = {
   description?: ReactNode;
   aside?: ReactNode;
   href?: string;
+  /** Image shown next to the cursor while the row is hovered */
+  preview?: string;
 };
 
 const external = (href: string) => !href.startsWith("/") && !href.startsWith("#");
@@ -41,12 +43,17 @@ const RowList = ({ rows, className }: { rows: Row[]; className?: string }) => (
               href={row.href}
               target="_blank"
               rel="noopener noreferrer"
+              data-preview={row.preview}
               className={cn(rowClass, "el-focus-styles rounded-sm")}
             >
               <RowInner {...row} />
             </a>
           ) : (
-            <Link href={row.href} className={cn(rowClass, "el-focus-styles rounded-sm")}>
+            <Link
+              href={row.href}
+              data-preview={row.preview}
+              className={cn(rowClass, "el-focus-styles rounded-sm")}
+            >
               <RowInner {...row} />
             </Link>
           )

@@ -5,8 +5,13 @@ import config from "~/config";
 import DeskObject, { Tape } from "./desk-object";
 import GithubStrip, { Contributions } from "./github-strip";
 import { MergedIcon } from "./icons";
+import DeskDrag from "./desk-drag";
+import ViewSwitch from "~/components/view-switch";
 
 const delay = (i: number): CSSProperties => ({ animationDelay: `${0.1 + i * 0.12}s` });
+
+const TOKEN_PATH =
+  "M129 23 L129 75 L129 127 L129 179 L129 231 C 250 228, 252 184, 201 180 L129 179 L129 231 L129 283";
 
 const AgentSketch = ({ style }: { style?: CSSProperties }) => (
   <DeskObject
@@ -91,6 +96,15 @@ const AgentSketch = ({ style }: { style?: CSSProperties }) => (
         d="M199 232 C 250 228, 252 184, 201 180"
         markerEnd="url(#sk-ahr)"
       />
+      {/* One request flowing through the graph, taking the revise loop once */}
+      <g aria-hidden>
+        <circle className="sketch-token-glow" r="8">
+          <animateMotion dur="7s" repeatCount="indefinite" path={TOKEN_PATH} />
+        </circle>
+        <circle className="sketch-token" r="4">
+          <animateMotion dur="7s" repeatCount="indefinite" path={TOKEN_PATH} />
+        </circle>
+      </g>
       <text className="sketch-note" x="200" y="262" transform="rotate(-5 200 262)">
         revise once
       </text>
@@ -139,6 +153,7 @@ const HeroDesk = ({ contributions }: { contributions: Contributions }) => {
             Open to full-time remote roles.
           </span>
         </p>
+        <ViewSwitch className="settle mt-5 md:hidden" />
       </div>
 
       <DeskObject
@@ -186,6 +201,7 @@ const HeroDesk = ({ contributions }: { contributions: Contributions }) => {
         <div className="pr-num">#5361</div>
         <div className="stamp">merged</div>
       </DeskObject>
+      <DeskDrag />
     </section>
   );
 };

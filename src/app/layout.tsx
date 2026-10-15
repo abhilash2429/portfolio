@@ -5,6 +5,7 @@ import { getSEOTags, renderSchemaTags } from "~/lib/seo";
 import { cn } from "~/lib/utils";
 import { INTRO_BOOT_SCRIPT } from "~/components/intro-store";
 import RootProviders from "~/providers";
+import BoilFilters from "~/components/effects/boil-filters";
 import "~/styles/globals.css";
 import "~/styles/desk.css";
 
@@ -43,6 +44,7 @@ export default function RootLayout({
         )}
       >
         {renderSchemaTags()}
+        <BoilFilters />
 
         <RootProviders>{children}</RootProviders>
 

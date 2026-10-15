@@ -54,16 +54,173 @@ body::after {
   opacity: 0.35;
 }
 
+/* Film grain that shifts a few times a second, like surya's "Kodak noise" */
+@keyframes desk-grain {
+  0% { background-position: 0 0; }
+  20% { background-position: -37px 21px; }
+  40% { background-position: 53px -44px; }
+  60% { background-position: -18px 66px; }
+  80% { background-position: 71px 12px; }
+  100% { background-position: 0 0; }
+}
+body::after {
+  animation: desk-grain 1.2s steps(1) infinite;
+}
+
+/* Dark mode: a warm pool of lamp light follows the pointer */
+.dark body::before {
+  background:
+    radial-gradient(520px circle at var(--lamp-x, 50%) var(--lamp-y, -20%), rgba(255, 210, 150, 0.075), transparent 70%),
+    var(--desk-lamp);
+}
+
+/* Line boil: strokes wobble like they were drawn by hand */
+@keyframes desk-boil {
+  0% { filter: url(#boil-0); }
+  33% { filter: url(#boil-1); }
+  66% { filter: url(#boil-2); }
+}
+.sketch svg,
+.circled svg,
+.scrawl,
+.incident-fixed::after,
+.datasheet-ring,
+.said {
+  animation: desk-boil 0.45s steps(1) infinite;
+}
+
+/* Logo: a cluster of dots that scatters a little and settles back */
+.logo-mark circle {
+  fill: #d97757;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.group:hover .logo-mark circle,
+.group:focus-visible .logo-mark circle {
+  transform: translate(var(--dx), var(--dy));
+}
+.logo-mark {
+  animation: desk-boil 0.6s steps(1) infinite;
+}
+
+/* A token travels through the agent sketch */
+.sketch-token {
+  fill: #d97757;
+}
+.sketch-token-glow {
+  fill: #d97757;
+  opacity: 0.25;
+}
+
+/* The contribution strip prints in, one week at a time */
+@keyframes desk-print {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.strip-grid {
+  animation: desk-print 1.6s steps(53) 0.9s both;
+}
+
+/* The merged stamp thumps down after the desk settles */
+@keyframes desk-stamp {
+  0% { opacity: 0; transform: rotate(-26deg) scale(2.4); }
+  70% { opacity: 0.85; transform: rotate(-12deg) scale(0.94); }
+  100% { opacity: 0.78; transform: rotate(-14deg) scale(1); }
+}
+.stamp {
+  animation: desk-stamp 0.42s cubic-bezier(0.3, 0, 0.4, 1) 1.7s both;
+}
+
+html[data-intro="pending"] .strip-grid,
+html[data-intro="pending"] .stamp {
+  animation-play-state: paused;
+}
+
+/* Sticky note: the corner lifts when you hover */
+.sticky .obj-face {
+  position: relative;
+}
+.sticky .obj-face::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  background: linear-gradient(135deg, #e9c962 45%, rgba(0, 0, 0, 0.12) 50%, transparent 56%);
+  box-shadow: -3px -3px 6px rgba(0, 0, 0, 0.08);
+  transition:
+    width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+a.sticky:hover .obj-face::after {
+  width: 38px;
+  height: 38px;
+}
+
+/* Scroll-driven: captions write themselves on, the incident chain lights up */
+@supports (animation-timeline: view()) {
+  @keyframes desk-write {
+    from { clip-path: inset(-20% 100% -20% 0); }
+    to { clip-path: inset(-20% 0 -20% 0); }
+  }
+  .work .caption {
+    animation: desk-write linear both;
+    animation-timeline: view();
+    animation-range: entry 30% cover 40%;
+  }
+  @keyframes desk-chain {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+  }
+  .incident-chain > span {
+    animation: desk-chain linear both;
+    animation-timeline: view();
+    animation-range: entry calc(30% + var(--i, 0) * 7%) entry calc(36% + var(--i, 0) * 7%);
+  }
+}
+
 /* ── object base ── */
 .obj {
   position: absolute;
   display: block;
   text-decoration: none;
   color: var(--desk-ink);
-  transform: rotate(var(--r, 0deg));
+  translate: var(--dx, 0px) var(--dy, 0px);
+  transform: rotate(calc(var(--r, 0deg) + var(--dr, 0deg)));
   transition:
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
     filter 0.5s;
+}
+
+.desk-draggable .obj {
+  cursor: grab;
+  touch-action: none;
+}
+.desk-draggable .obj.is-dragging {
+  cursor: grabbing;
+  transition: transform 0.12s linear;
+}
+.obj.is-dragging .obj-face {
+  box-shadow: var(--desk-shadow-up);
+}
+.obj.is-tidying {
+  transition:
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.desk-tidy {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  z-index: 20;
+  transform: translateX(-50%) rotate(-2deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.desk-tidy.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .obj-face {
@@ -894,14 +1051,17 @@ a.obj:focus-visible .obj-face {
   from {
     opacity: 0;
     filter: blur(10px);
-    translate: 0 14px;
-    scale: 1.05;
+    scale: 1.12;
+    rotate: 5deg;
+  }
+  60% {
+    scale: 0.985;
   }
   to {
     opacity: 1;
     filter: blur(0);
-    translate: 0 0;
     scale: 1;
+    rotate: 0deg;
   }
 }
 .desk-waiting .obj,
@@ -910,8 +1070,24 @@ a.obj:focus-visible .obj-face {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .settle {
+  .settle,
+  body::after,
+  .sketch svg,
+  .circled svg,
+  .scrawl,
+  .incident-fixed::after,
+  .datasheet-ring,
+  .said,
+  .logo-mark,
+  .strip-grid,
+  .stamp,
+  .work .caption,
+  .incident-chain > span {
     animation: none;
+  }
+  .sketch-token,
+  .sketch-token-glow {
+    display: none;
   }
   .desk-waiting .obj,
   .desk-waiting .desk-text > * {
@@ -1050,4 +1226,100 @@ a.obj:focus-visible .obj-face {
     width: 186px;
     margin-top: -180px;
   }
+}
+
+/* ── path: index cards strung along a thread ── */
+.path-track {
+  margin-top: 28px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  cursor: grab;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.path-track::-webkit-scrollbar {
+  display: none;
+}
+.path-track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+.path-track.is-dragging .path-card {
+  pointer-events: none;
+}
+.path-list {
+  position: relative;
+  display: flex;
+  gap: 22px;
+  width: max-content;
+  margin: 0;
+  padding: 34px max(16px, calc(50vw - 310px)) 40px;
+  list-style: none;
+}
+.path-list::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 40px;
+  border-top: 1.5px dashed hsl(var(--subtle) / 0.6);
+}
+.path-stop {
+  position: relative;
+  flex: 0 0 210px;
+  scroll-snap-align: center;
+  transform: rotate(var(--r, 0deg));
+}
+.path-pin {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f1b9a4, #d97757 65%);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+.path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 150px;
+  margin-top: 8px;
+  padding: 18px 16px 16px;
+  border-radius: 2px;
+  background: #fbfaf6;
+  background-image: repeating-linear-gradient(transparent 0 23px, rgba(70, 110, 160, 0.12) 23px 24px);
+  background-position: 0 30px;
+  color: #2a2924;
+  text-decoration: none;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+a.path-card:hover {
+  transform: translateY(-4px) rotate(1deg);
+}
+.path-when {
+  font: 600 20px/1 var(--font-caveat), cursive;
+  color: var(--desk-pen-fixed);
+}
+.path-title {
+  font: 400 20px/1.15 var(--font-instrument-serif), serif;
+  color: #1c1b18;
+}
+.path-line {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #57534b;
+}
+.path-next {
+  background: transparent;
+  border: 1.5px dashed hsl(var(--subtle) / 0.7);
+}
+.path-next .path-title {
+  color: hsl(var(--foreground));
+}
+.path-next .path-line {
+  color: hsl(var(--muted-foreground));
 }

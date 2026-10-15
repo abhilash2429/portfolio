@@ -24,6 +24,20 @@ I built it against a published benchmark so every design choice is backed by a n
 5. **Answer.** The answerer cites every claim, prefers the newest version when two docs look like versions of each other, and abstains with a fixed sentence when the docs don't answer.
 6. **Verify.** A model from a different family checks each cited claim against its document and sets a confidence flag. The flag never changes the answer.
 
+### Where the time goes
+
+Measured on the online pipeline over 50 dev questions, on a laptop with an RTX 3050 6 GB.
+
+<StagePipeline
+  caption="the reranker is the bottleneck"
+  stages={[
+    { name: "Route", detail: "gpt-oss-120b on Bedrock, low effort", p50: 0.7, p90: 1.3 },
+    { name: "Retrieve + fuse", detail: "BM25 in process, dense exact scan on CPU", p50: 8.0, p90: 10.4 },
+    { name: "Rerank 100", detail: "Qwen3-Reranker-0.6B on the GPU", p50: 34.2, p90: 41.8 },
+    { name: "Generate", detail: "gpt-oss-120b on Bedrock", p50: 3.9, p90: 12 },
+  ]}
+/>
+
 ## Served to agents
 
 `entsearch-mcp` exposes the indexes to any MCP client, so an agent or Claude Code can use company search as a tool.
