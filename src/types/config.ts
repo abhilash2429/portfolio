@@ -12,10 +12,8 @@ export interface ConfigProps {
     instagram: string;
     discord: string;
     email: string;
-    phone: string;
     youtube: string;
     twitter: string;
-    buymeacoffee: string;
     resume: string;
   };
 

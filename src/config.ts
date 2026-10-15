@@ -1,9 +1,9 @@
 import { ConfigProps } from "./types/config";
 
 export const config = {
-  appName: "ab24",
-  appDesignation: "AI & Software Engineer",
-  appDescription: `Hi, I'm Abhilash. I'm Pragmatic.`,
+  appName: "Abhilash Reddy",
+  appDesignation: "Applied AI Engineer",
+  appDescription: `Applied AI engineer building agents, evals and the backend behind them. Open to full-time remote roles.`,
 
   domainName: "abhilash24.me",
 
@@ -18,10 +18,8 @@ export const config = {
     instagram: "",
     discord: "https://discordapp.com/users/abhilash_2429",
     email: "abhilashreddy2429@gmail.com",
-    phone: "+916303467135",
     youtube: "",
     twitter: "",
-    buymeacoffee: "https://buymeacoffee.com/abhilash2429",
     resume: "/resume",
   },
 

@@ -12,30 +12,26 @@ const AboutSection = () => {
     <section className="grid gap-8 sm:gap-4 md:grid-cols-3" aria-label="About">
       <div className="order-2 space-y-3 sm:order-1 md:col-span-2">
         <h1 className="font-serif text-2xl sm:text-3xl">
-          <BlurText text="Abhilash, 19" />
+          <BlurText text="Abhilash Reddy" />
         </h1>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          I&apos;m an AI and software engineer in the making. I build products
-          around ideas that keep me up at 2 AM, and most of them start with me
-          asking &quot;why?&quot;
+          I&apos;m an applied AI engineer. I build agents end to end: the model
+          loop, the eval that proves it works, and the backend that keeps it
+          running.
         </p>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          Tech has had me hooked since I was a kid: iPods, keypad phones, then
-          Android, and now AI. These days I love building with AI, even when I
-          don&apos;t fully know how yet.
+          Lately that&apos;s Bladerunner, a watchdog that catches agents
+          breaking policy at 0.90 precision on held-out traces, and an
+          enterprise search system that beats BM25 by 20 points across 512K
+          documents. I&apos;ve shipped fixes upstream to pipecat and kornia, won
+          the TCS AI Hackathon and made the Meta PyTorch OpenEnv grand finale.
         </p>
 
         <p className={typo({ variant: "paragraph", font: "sans" })}>
-          I&apos;m usually in the middle of building something and breaking a
-          few things along the way. I&apos;m pretty sure it all adds up to
-          something.
-        </p>
-
-        <p className={typo({ variant: "paragraph", font: "sans" })}>
-          When I&apos;m not building, I follow the financial markets, read,
-          watch movies, or fall down YouTube rabbit holes.
+          Away from the keyboard I follow the markets, read, and watch more
+          movies than I should.
         </p>
 
         <p
@@ -45,10 +41,9 @@ const AboutSection = () => {
           )}
         >
           <span className="text-foreground font-medium">Open to work</span>:
-          internships, full-time roles, or collabs.{" "}
+          full-time remote roles in applied AI and backend engineering.{" "}
           <a
             href={`mailto:${config.social.email}`}
-            aria-label="Hire Me"
             className="el-focus-styles text-ring"
           >
             Let&apos;s talk.

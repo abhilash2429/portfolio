@@ -23,17 +23,12 @@ const nextConfig = {
       },
       {
         source: "/linkedin",
-        destination: "https://www.linkedin.com/in/abhilashreddy2429/",
+        destination: "https://www.linkedin.com/in/abhilashreddymanda/",
         permanent: true,
       },
       {
         source: "/github",
         destination: "https://github.com/abhilash2429",
-        permanent: true,
-      },
-      {
-        source: "/donate",
-        destination: "https://buymeacoffee.com/abhilash2429",
         permanent: true,
       },
       {

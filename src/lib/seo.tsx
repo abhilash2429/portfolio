@@ -14,19 +14,18 @@ export const getSEOTags = ({
   extraTags?: Record<string, unknown>;
 } = {}) => {
   return {
-    title: title || config.appName,
+    title: title ? `${title} | ${config.appName}` : `${config.appName} | ${config.appDesignation}`,
     description: description || config.appDescription,
     keywords: keywords || [
-      "portfolio",
-      "personal portfolio",
-      "web developer",
-      "software engineer",
-      "front-end developer",
-      "creative",
-      "coder",
-      "programmer",
-      "developer",
-      "portfolio website",
+      "Abhilash Reddy",
+      "applied AI engineer",
+      "AI engineer",
+      "AI agents",
+      "LLM evaluation",
+      "RAG",
+      "backend engineer",
+      "system design",
+      "remote",
     ],
     applicationName: config.appName,
 
@@ -42,16 +41,16 @@ export const getSEOTags = ({
     ),
 
     openGraph: {
-      title: openGraph?.title || config.appName,
+      title: openGraph?.title || `${config.appName} | ${config.appDesignation}`,
       description: openGraph?.description || config.appDescription,
       url: openGraph?.url || `https://${config.domainName}/`,
-      siteName: openGraph?.title || config.appName,
+      siteName: config.appName,
       locale: "en_US",
       type: "website",
     },
 
     twitter: {
-      title: openGraph?.title || config.appName,
+      title: openGraph?.title || `${config.appName} | ${config.appDesignation}`,
       description: openGraph?.description || config.appDescription,
       card: "summary_large_image",
     },
