@@ -106,7 +106,7 @@ const DeskDrag = () => {
     <button
       type="button"
       onClick={tidy}
-      data-no-bubble
+      data-no-spark
       className={`desk-tidy font-hand text-xl text-muted-foreground hover:text-pen ${moved ? "is-visible" : ""}`}
       tabIndex={moved ? 0 : -1}
       aria-hidden={!moved}
