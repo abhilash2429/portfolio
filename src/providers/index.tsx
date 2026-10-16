@@ -2,6 +2,8 @@
 import { ReactNode } from "react";
 
 import BottomBlur from "~/components/bottom-blur";
+import ClickBubbles from "~/components/effects/click-bubbles";
+import LampFollow from "~/components/effects/lamp-follow";
 import IntroLoader from "~/components/intro-loader";
 import ScrollProgress from "~/components/scroll-progress";
 import { TooltipProvider } from "~/components/ui/tooltip";
@@ -20,6 +22,8 @@ const RootProviders = ({ children }: { children: ReactNode }) => {
             <ScrollProgress />
             <TopLoader />
             <IntroLoader />
+            <ClickBubbles />
+            <LampFollow />
             {children}
             <BottomBlur />
             <Toaster />

@@ -5,14 +5,14 @@ import SkipContent from "~/components/ui/skip-content";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="container relative flex min-h-dvh flex-col space-y-4 py-2">
-      <div className="!mb-6 space-y-4">
-        <SkipContent />
-        <Navbar />
-        <ViewTransition name="page">
-          <div>{children}</div>
-        </ViewTransition>
-      </div>
+    <div className="relative flex min-h-dvh flex-col">
+      <SkipContent />
+      <Navbar />
+      <ViewTransition name="page">
+        <main id="main-content" className="relative z-[2] flex-1 overflow-x-clip">
+          {children}
+        </main>
+      </ViewTransition>
       <Footer />
     </div>
   );

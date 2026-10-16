@@ -26,8 +26,19 @@ html.lenis body {
   }
 
   ::selection {
-    @apply bg-ring/20 text-foreground;
+    @apply bg-pen/20 text-foreground;
   }
+
+  /* The single reading column every text section sits in */
+  .col {
+    @apply mx-auto w-full max-w-[652px] px-4;
+  }
+}
+
+/* Desk objects wait for the first-visit curtain, then settle in */
+html[data-intro="pending"] .settle,
+html[data-intro="pending"] .circled path {
+  animation-play-state: paused;
 }
 
 /* ── First-visit intro gate ──
@@ -152,4 +163,50 @@ body.space-fullscreen {
   background: transparent;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* ── Classic portfolio: the previous black and white palette, scoped ── */
+.classic {
+  --background: 0 0% 97%;
+  --foreground: 0 0% 2%;
+  --card: 0 0% 97%;
+  --card-foreground: 0 0% 2%;
+  --popover: 0 0% 97%;
+  --popover-foreground: 0 0% 2%;
+  --primary: 0 0% 8%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 8%;
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 30%;
+  --accent: 0 0% 95%;
+  --accent-foreground: 0 0% 8%;
+  --border: 0 0% 88%;
+  --input: 0 0% 88%;
+  --ring: 0 0% 10%;
+}
+
+.dark .classic {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 0%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 0%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 0 0% 100%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 65%;
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 20%;
+  --input: 0 0% 15%;
+  --ring: 0 0% 100%;
+}
+
+html:has(.classic) body::before,
+html:has(.classic) body::after {
+  display: none;
 }

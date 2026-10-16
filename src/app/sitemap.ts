@@ -1,4 +1,4 @@
-import { posts } from "#site/content";
+import { posts, works } from "#site/content";
 import { MetadataRoute } from "next";
 import { BasePath } from "~/lib/utils";
 
@@ -7,6 +7,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: BasePath(`/blog/${post.slugAsParams}`),
     lastModified: post.date,
   }));
+
+  const caseStudies = works
+    .filter((work) => work.published)
+    .map((work) => ({ url: BasePath(`/work/${work.slugAsParams}`), lastModified: work.date }));
 
   return [
     {
@@ -19,9 +23,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
     },
     {
-      url: BasePath("/projects"),
+      url: BasePath("/work"),
       lastModified: new Date(),
     },
+    ...caseStudies,
 
     ...blogPosts,
   ];

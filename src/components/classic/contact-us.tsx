@@ -5,13 +5,13 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "~/component
 import config from "~/config";
 import { cn } from "~/lib/utils";
 import { ContactSchema, contactSchemaType } from "~/schema";
-import { CustomLink } from "./mdx";
+import { CustomLink } from "~/components/mdx";
 import Socials from "./socials";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { typo } from "./ui/typograpghy";
-import BlurText from "~/components/ui/blur-text";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
+import { typo } from "~/components/ui/typograpghy";
+import BlurText from "./ui-blur-text";
 import { useState } from "react";
 import { toast } from "sonner";
 

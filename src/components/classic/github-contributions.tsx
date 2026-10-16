@@ -2,8 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
-import { typo } from "./ui/typograpghy";
-import BlurText from "~/components/ui/blur-text";
+import { typo } from "~/components/ui/typograpghy";
+import BlurText from "./ui-blur-text";
 
 const GitHubCalendar = dynamic(() => import("react-github-calendar"), {
   ssr: false,

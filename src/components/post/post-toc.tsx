@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 
-const TOC_STYLES: ClassValue = "el-focus-styles rounded-sm text-muted-foreground hover:text-ring";
+const TOC_STYLES: ClassValue = "el-focus-styles rounded-sm text-muted-foreground hover:text-pen";
 
 const PostTableOfContent = ({ toc }: { toc: Post["toc"] }) => {
   const [tocValue, setTocValue] = useState("");
@@ -32,7 +32,7 @@ const PostTableOfContent = ({ toc }: { toc: Post["toc"] }) => {
   return (
     <Accordion type="single" collapsible className="w-full" onValueChange={setTocValue}>
       <AccordionItem value="post-toc">
-        <AccordionTrigger headingLevel={2} className="el-focus-styles rounded-sm bg-muted p-2 font-serif text-base">
+        <AccordionTrigger headingLevel={2} className="el-focus-styles rounded-sm border-y border-foreground/10 px-0 py-3 font-serif text-lg hover:no-underline">
           <p>
             Table of Contents{" "}
             <span className="text-muted-foreground">(Click to {tocValue ? "Close" : "Open"})</span>

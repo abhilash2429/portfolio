@@ -1,38 +1,19 @@
-import { typo } from "../ui/typograpghy";
-import BlurText from "~/components/ui/blur-text";
+import RowList, { SectionHead } from "~/components/ui/row-list";
 import { THackathon } from "./_hackathon-data";
-import HackathonItem from "./hackathon-item";
 
-type HackathonListProps = {
-  hackathons: THackathon[];
-  showTitle?: boolean;
-};
-
-const HackathonList = ({
-  hackathons,
-  showTitle = true,
-}: HackathonListProps) => {
-  return (
-    <section aria-label="hackathons and competitions" className="mt-5 space-y-6">
-      {showTitle && (
-        <h2 className={typo({ variant: "h2" })}>
-          <BlurText text="Hackathons & Competitions" />
-        </h2>
-      )}
-
-      <div className="!mt-8">
-        <ol className="space-y-8" role="list">
-          {hackathons.map((hackathon, index) => (
-            <HackathonItem
-              key={hackathon.id}
-              {...hackathon}
-              isLast={index === hackathons.length - 1}
-            />
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-};
+const HackathonList = ({ hackathons }: { hackathons: THackathon[] }) => (
+  <section aria-labelledby="hackathons" className="scroll-mt-28">
+    <SectionHead title="Hackathons" id="hackathons" />
+    <RowList
+      rows={hackathons.map((h) => ({
+        key: h.id,
+        title: `${h.title}, ${h.role}`,
+        description: h.summary,
+        aside: h.date,
+        href: h.link,
+      }))}
+    />
+  </section>
+);
 
 export default HackathonList;

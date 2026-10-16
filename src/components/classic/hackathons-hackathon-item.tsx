@@ -1,9 +1,9 @@
 import React from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { cn } from "~/lib/utils";
-import { CustomLink } from "../mdx";
-import { typo } from "../ui/typograpghy";
-import { THackathon } from "./_hackathon-data";
+import { CustomLink } from "~/components/mdx";
+import { typo } from "~/components/ui/typograpghy";
+import { THackathon } from "~/components/hackathons/_hackathon-data";
 
 type HackathonItemProps = THackathon & {
   isLast?: boolean;
@@ -14,7 +14,7 @@ const HackathonItem: React.FC<HackathonItemProps> = ({
   role,
   date,
   link,
-  description,
+  summary,
   isLast = false,
 }) => {
   return (
@@ -55,19 +55,9 @@ const HackathonItem: React.FC<HackathonItemProps> = ({
           </span>
         </div>
 
-        <ul className="space-y-1.5 pt-1">
-          {description.map((bullet, idx) => (
-            <li
-              key={idx}
-              className={cn(
-                typo({ variant: "paragraph", size: "sm" }),
-                "relative pl-4 text-muted-foreground before:absolute before:left-0 before:top-2 before:size-1.5 before:rounded-full before:bg-muted-foreground/60"
-              )}
-            >
-              {bullet}
-            </li>
-          ))}
-        </ul>
+        <p className={cn(typo({ variant: "paragraph", size: "sm" }), "pt-1 text-muted-foreground")}>
+          {summary}
+        </p>
       </div>
     </li>
   );

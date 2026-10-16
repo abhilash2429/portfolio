@@ -4,8 +4,8 @@ import React, { ViewTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "~/components/ui/card";
-import PostMetadata from "./post-metadata";
-import Tags from "../tags";
+import PostMetadata from "~/components/post/post-metadata";
+import Tags from "~/components/tags";
 
 interface PostItemProps extends Post {
   layout?: "vertical" | "horizontal";

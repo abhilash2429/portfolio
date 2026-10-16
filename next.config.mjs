@@ -16,6 +16,11 @@ const nextConfig = {
   redirects: async () => {
     return [
       {
+        source: "/projects",
+        destination: "/work",
+        permanent: true,
+      },
+      {
         source: "/resume",
         destination:
           "https://drive.google.com/file/d/1H0mKGg6zKlIv4JX1op4lCwsDkWdYutu4/view?usp=sharing",
@@ -23,17 +28,12 @@ const nextConfig = {
       },
       {
         source: "/linkedin",
-        destination: "https://www.linkedin.com/in/abhilashreddy2429/",
+        destination: "https://www.linkedin.com/in/abhilashreddymanda/",
         permanent: true,
       },
       {
         source: "/github",
         destination: "https://github.com/abhilash2429",
-        permanent: true,
-      },
-      {
-        source: "/donate",
-        destination: "https://buymeacoffee.com/abhilash2429",
         permanent: true,
       },
       {

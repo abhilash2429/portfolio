@@ -1,38 +1,19 @@
-import { typo } from "../ui/typograpghy";
-import BlurText from "~/components/ui/blur-text";
+import RowList, { SectionHead } from "~/components/ui/row-list";
 import { TEducation } from "./_education-data";
-import EducationItem from "./education-item";
 
-type EducationListProps = {
-    educationList: TEducation[];
-    showTitle?: boolean;
-};
-
-const EducationList = ({
-    educationList,
-    showTitle = true,
-}: EducationListProps) => {
-    return (
-        <section aria-label="education" className="mt-5 space-y-6">
-            {showTitle && (
-                <h2 className={typo({ variant: "h2" })}>
-                  <BlurText text="Education" />
-                </h2>
-            )}
-
-            <div className="!mt-8">
-                <ol className="space-y-6" role="list">
-                    {educationList.map((education, index) => (
-                        <EducationItem
-                            key={education.id}
-                            {...education}
-                            isLast={index === educationList.length - 1}
-                        />
-                    ))}
-                </ol>
-            </div>
-        </section>
-    );
-};
+const EducationList = ({ educationList }: { educationList: TEducation[] }) => (
+  <section aria-labelledby="school">
+    <SectionHead title="School" id="school" />
+    <RowList
+      rows={educationList.map((e) => ({
+        key: e.id,
+        title: e.institution,
+        description: e.degree,
+        aside: e.duration,
+        href: e.website,
+      }))}
+    />
+  </section>
+);
 
 export default EducationList;

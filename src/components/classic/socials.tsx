@@ -3,10 +3,9 @@ import { Linkedin, FileText } from "lucide-react";
 
 import { FiGithub } from "react-icons/fi";
 import { TbBrandDiscord } from "react-icons/tb";
-import { SiBuymeacoffee } from "react-icons/si";
 import config from "~/config";
 import { cn } from "~/lib/utils";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 
 const socialsIcons = [
   {
@@ -37,13 +36,6 @@ const socialsIcons = [
     label: "Resume",
     icon: <FileText className="size-[1.2rem]" />,
     href: config.social.resume,
-    className: "hover:bg-muted hover:text-foreground" as ClassValue,
-  },
-  {
-    id: 7,
-    label: "Buy Me a Coffee",
-    icon: <SiBuymeacoffee className="size-[1.2rem]" />,
-    href: config.social.buymeacoffee,
     className: "hover:bg-muted hover:text-foreground" as ClassValue,
   },
 ];

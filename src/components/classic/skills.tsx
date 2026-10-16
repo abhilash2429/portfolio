@@ -1,9 +1,9 @@
 "use client";
 import Marquee from "react-fast-marquee";
 import { useReducedMotion } from "framer-motion";
-import { BACKEND_STACKS, FRONTEND_STACKS, stacksProps } from "~/constants/stack";
-import { typo } from "./ui/typograpghy";
-import BlurText from "~/components/ui/blur-text";
+import { BACKEND_STACKS, FRONTEND_STACKS, stacksProps } from "./stack";
+import { typo } from "~/components/ui/typograpghy";
+import BlurText from "./ui-blur-text";
 
 const Skills = () => {
   const reduced = useReducedMotion();

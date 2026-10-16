@@ -1,0 +1,64 @@
+---
+title: "Oversight Arena"
+project: "oversight-arena"
+description: "An RL environment where a supervisor LLM manages five worker agents, some deceptive, some colluding, and has to learn when to look deeper. GRPO on Qwen2.5-3B."
+meta: "Apr 2026. Grand finale, Meta PyTorch OpenEnv Hackathon, Bangalore."
+date: "2026-04-26"
+published: true
+---
+
+Teams now chain sub-agents into pipelines: one writes the spec, the next writes the code, then tests, security review, deployment approval. Most of the time it works and the dashboards stay green.
+
+The trouble starts when a worker in the middle is quietly wrong. A coding agent builds SQL with an f-string instead of a parameterized query. A test agent covers everything except the buggy path. A security review never checks for path traversal. None of these look like failures from the outside, and each downstream agent treats its upstream's output as ground truth.
+
+Oversight Arena simulates that pipeline and trains a supervisor model to catch the silent failures before they propagate.
+
+<video autoPlay loop muted playsInline className="my-6 w-full rounded-lg shadow-sm">
+  <source src="/videos/pipeline.mp4" type="video/mp4" />
+</video>
+
+## The environment
+
+Five workers run in order: requirement analysis, coding, test generation, security review, deployment. Each can fail in five ways. On every step the supervisor picks one action for one worker: observe, deep inspect, redirect, terminate or approve.
+
+The environment is fully scripted. No model calls happen inside it, so episodes are fast and deterministic for a given seed, and training doesn't burn GPU time on worker rollouts.
+
+Two mechanics make it harder than a plain anomaly detector:
+
+- **Deceptive workers.** The surface output looks completely clean. The flaw only shows if the supervisor spends two steps on a deep inspection. Approving a deceptive worker is the heaviest penalty in the reward (−3.0).
+- **Colluding pairs.** Two workers produce outputs that agree with each other and are jointly wrong. Each looks fine alone, so catching them means reasoning across workers.
+
+![Sketch of the two mechanics: a deceptive worker that only shows its flaw under deep inspection, and a colluding pair that passes individual checks](../../assets/images/two_mechanics.png)
+
+## Rewards
+
+The reward has nine components, all computed server-side from hidden worker state the supervisor never sees. Catching a deceptive worker pays more than catching an obvious one. A reasoning bonus only counts when the action itself is correct, so the model can't earn reward by writing a fluent justification for a bad call.
+
+![Reward components: catches, deceptive catches, collusion catches and efficiency on one side, penalties for false positives, approving failing or deceptive workers, and bad formatting on the other](../../assets/images/rewards.png)
+
+## Training
+
+GRPO on Qwen2.5-3B with a curriculum: easy episodes with one obvious failure, then medium with deceptive workers mixed in, then hard with four compromised workers at once. Early training uses a small shaping bonus so the model learns the action format. The benchmark compares raw environment reward only.
+
+## Results
+
+Mean reward over 30 episodes per difficulty.
+
+| Difficulty | Random | Heuristic | Qwen 3B base | Trained (GRPO) | Oracle |
+|---|---:|---:|---:|---:|---:|
+| Easy | 6.45 | 22.56 | −0.52 | 7.2 | 22.20 |
+| Medium | 6.85 | 20.86 | −0.52 | 5.4 | 22.03 |
+| Hard | 6.64 | 14.73 | −0.52 | 3.8 | 19.64 |
+
+The untrained model can't produce a parseable action at all, so every episode sits at the format-penalty floor. GRPO gets it acting in the environment. It still sits well below a hand-tuned heuristic, and I'd rather show that than hide it.
+
+The heuristic ceilings on hard because it never deep-inspects, so it misses every deceptive worker. No baseline catches a deceptive worker, and none catches a full colluding pair. That gap is what the environment exists to measure.
+
+Where the trained supervisor still fails:
+
+- Hard mode times out. Investigating four compromised workers in 25 steps is tight.
+- It rarely catches a full colluding pair.
+- It sometimes deep-inspects clean workers and burns its step budget.
+- Keeping the policy close to the reference model during GRPO was unstable.
+
+The full write-up, with the action space and a worked episode, is in [the blog post](/blog/blog-post). You can run the environment on the [Hugging Face Space](https://huggingface.co/spaces/abhilash242299/oversight-arena).
